@@ -41,7 +41,8 @@ tab <- function(data, ..., as_df = FALSE) {
             `Cum. Freq.`   = num(`Cum. Freq.`, notation = "dec"),
             `Percent`      = num(`Percent`, notation = "dec", label = "%", digits = 2, scale = 100),
             `Cum. Percent` = num(`Cum. Percent`, label = "%", digits = 2, scale = 100),
-         )
+         ) %>%
+         print(n = Inf)
    }
 
    return(tab_df)
