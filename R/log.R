@@ -7,6 +7,17 @@
 #' @param msg message to be printed in the console
 #' @return prints a formatted message in the console
 #' @export
+log <- function(msg, log_type = "info") {
+   log_type <- tolower(log_type)
+   switch(
+      log_type,
+      info    = log_info(msg),
+      success = log_success(msg),
+      warn    = log_warn(msg),
+      error   = log_error(msg)
+   )
+}
+
 log_info <- function(msg = NULL) {
    log_type <- "INFO" %>% stri_pad_right(7, " ")
    log      <- bold(blue(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
@@ -33,15 +44,4 @@ log_error <- function(msg = NULL) {
    log      <- bold(red(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
    msg      <- glue(msg, .envir = parent.frame(1))
    cat(log, msg, "\n")
-}
-
-log <- function(msg, log_type = "info") {
-   log_type <- tolower(log_type)
-   switch(
-      log_type,
-      info    = log_info(msg),
-      success = log_success(msg),
-      warn    = log_warn(msg),
-      error   = log_error(msg)
-   )
 }
