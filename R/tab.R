@@ -42,7 +42,7 @@ tab <- function(data, ..., as_df = FALSE) {
             `Percent`      = num(`Percent`, notation = "dec", label = "%", digits = 2, scale = 100),
             `Cum. Percent` = num(`Cum. Percent`, label = "%", digits = 2, scale = 100),
          ) %>%
-         print(n = Inf)
+         as_tibble()
    }
 
    return(tab_df)
