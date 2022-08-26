@@ -30,15 +30,16 @@ tab <- function(data, ..., as_df = FALSE) {
          `Cum. Freq.`   = cumsum(`Freq.`),
          `Percent`      = round((`Freq.` / sum(`Freq.`)), 10),
          `Cum. Percent` = round(cumsum(freq = `Freq.` / sum(`Freq.`)), 10),
-      ) %>%
-      adorn_totals(
-         where = "row",
-         fill  = "-",
-         na.rm = TRUE,
-         name  = "Total",
-         `Freq.`,
-         `Percent`
       )
+
+   # get max data for cumulative cols
+   cum_freq <- max(tab_df$`Cum. Freq.`)
+   cum_perc <- max(tab_df$`Cum. Percent`)
+   tab_df   <- tab_df %>%
+      adorn_totals()
+
+   tab_df[nrow(tab_df), "Cum. Freq."]   <- cum_freq
+   tab_df[nrow(tab_df), "Cum. Percent"] <- cum_perc
 
    # format frame
    if (!as_df) {
