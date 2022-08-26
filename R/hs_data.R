@@ -16,7 +16,7 @@
 #' @param yr reporting year of data
 #' @param mo reporting month of data
 #' @param file_type file extension of the data to retreived
-#' @return prints a formatted message in the console
+#' @return returns the full path of the latest version of the monthly dataset
 #' @export
 hs_data <- function(sys = NULL, type = "reg", yr = NULL, mo = NULL, file_type = "dta") {
    # ! internal functions

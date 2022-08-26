@@ -31,7 +31,14 @@ tab <- function(data, ..., as_df = FALSE) {
          `Percent`      = round((`Freq.` / sum(`Freq.`)), 10),
          `Cum. Percent` = round(cumsum(freq = `Freq.` / sum(`Freq.`)), 10),
       ) %>%
-      adorn_totals()
+      adorn_totals(
+         where = "row",
+         fill  = "-",
+         na.rm = TRUE,
+         name  = "Total",
+         `Freq.`,
+         `Percent`
+      )
 
    # format frame
    if (!as_df) {
@@ -42,8 +49,9 @@ tab <- function(data, ..., as_df = FALSE) {
             `Percent`      = num(`Percent`, notation = "dec", label = "%", digits = 2, scale = 100),
             `Cum. Percent` = num(`Cum. Percent`, label = "%", digits = 2, scale = 100),
          ) %>%
-         as_tibble()
+         as_tibble() %>%
+         print(n = 1e7)
+   } else {
+      return(tab_df)
    }
-
-   return(tab_df)
 }
