@@ -2,4 +2,6 @@
 
 export(hs_data)
 export(log)
+export(suppress_warnings)
 export(tab)
+export(tabstat)

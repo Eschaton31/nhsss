@@ -29,9 +29,9 @@ hs_data(sys = NULL, type = "reg", yr = NULL, mo = NULL, file_type = "dta")
 \item{file_type}{file extension of the data to retreived}
 }
 \value{
-prints a formatted message in the console
+returns the full path of the latest version of the monthly dataset
 }
 \description{
-These function retreives the datasets of the NHSSS Unit based on the naming
+This function retreives the datasets of the NHSSS Unit based on the naming
 convention established and in-use.
 }
