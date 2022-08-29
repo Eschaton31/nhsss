@@ -1,7 +1,7 @@
 #' @title NHSSS Dataset Retreiver
 #'
 #' @description
-#' These function retreives the datasets of the NHSSS Unit based on the naming
+#' This function retreives the datasets of the NHSSS Unit based on the naming
 #' convention established and in-use.
 #'
 #' @param sys coded name of surveillance system

@@ -56,3 +56,62 @@ tab <- function(data, ..., as_df = FALSE) {
       return(tab_df)
    }
 }
+
+#' @title Stata-like Statistics Tabulation
+#'
+#' @description
+#' This function transforms a data.frame into a summary table indicating the `min`,
+#' `median`, `max`, and `NAs` of the columns specified.
+#'
+#' @param data the input data.frame
+#' @param ... columns to summarise. This takes a tidyselect specification.
+#' @return Returns an summarised statistics data.frame.
+#' @export
+#' @examples
+#'
+#' # uni-variate tabulation
+#' mtcars %>% tabstat(am)
+#' tabstat(mtcars, am)
+#'
+#' # multi-variate tabulation
+#' mtcars %>% tabstat(am, cyl)
+#' tabstat(mtcars, am, cyl)
+tabstat <- function(data, ...) {
+   data %>%
+      select(...) %>%
+      summarise_all(
+         list(
+            MIN    = ~min(., na.rm = TRUE),
+            MEDIAN = ~median(., na.rm = TRUE),
+            MAX    = ~max(., na.rm = TRUE),
+            NAs    = ~sum(if_else(is.na(.), 1, 0, 0))
+         )
+      ) %>%
+      mutate_all(~as.character(.)) %>%
+      pivot_longer(
+         cols      = names(select_at(., vars(ends_with(c("_MEDIAN", "_MAX", "_MIN", "_NAs", ignore.case = FALSE))))),
+         names_to  = "VARIABLE",
+         values_to = "VAL"
+      ) %>%
+      mutate(
+         STAT     = case_when(
+            stri_detect_regex(VARIABLE, "_MEDIAN$") ~ "MEDIAN",
+            stri_detect_regex(VARIABLE, "_MIN$") ~ "MIN",
+            stri_detect_regex(VARIABLE, "_MAX$") ~ "MAX",
+            stri_detect_regex(VARIABLE, "_NAs$") ~ "NAs",
+         ),
+         VARIABLE = stri_replace_last_regex(VARIABLE, paste0("_", STAT, "$"), "")
+      ) %>%
+      pivot_wider(
+         id_cols     = VARIABLE,
+         names_from  = STAT,
+         values_from = VAL
+      ) %>%
+      select(
+         VARIABLE,
+         MIN,
+         MEDIAN,
+         MAX,
+         NAs
+      )
+}
