@@ -81,9 +81,9 @@ tabstat <- function(data, ...) {
       select(...) %>%
       summarise_all(
          list(
-            MIN    = ~min(., na.rm = TRUE),
-            MEDIAN = ~median(., na.rm = TRUE),
-            MAX    = ~max(., na.rm = TRUE),
+            MIN    = ~suppress_warnings(min(., na.rm = TRUE), "returning [\\-]*Inf"),
+            MEDIAN = ~suppress_warnings(median(., na.rm = TRUE), "returning [\\-]*Inf"),
+            MAX    = ~suppress_warnings(max(., na.rm = TRUE), "returning [\\-]*Inf"),
             NAs    = ~sum(if_else(is.na(.), 1, 0, 0))
          )
       ) %>%
