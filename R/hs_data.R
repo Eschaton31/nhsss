@@ -24,14 +24,14 @@ hs_data <- function(sys = NULL, type = "reg", yr = NULL, mo = NULL, file_type = 
    format_path <- function(yr, mo) {
       yr      <- as.character(yr)
       mo      <- ifelse(nchar(mo) == 1, paste0("0", mo), mo)
-      pattern <- glue("*{sys_prefix}[-a-z]*_{yr}\\-{mo}\\.{file_type}")
+      pattern <- glue("*{sys_prefix}[-a-z]*_{yr}\\-{mo}.*\\.{file_type}")
    }
 
    # find the latest file
    get_latest <- function(path, pattern) sort(list.files(path = path, pattern = pattern, full.names = TRUE), decreasing = TRUE)
 
    # summary preparations for yr mo data
-   if (is.numeric(yr) || is.numeric(mo)) {
+   if (!is.numeric(yr) || !is.numeric(mo)) {
       yr <- as.numeric(yr)
       mo <- as.numeric(mo)
    }
