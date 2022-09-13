@@ -51,6 +51,7 @@ hs_data <- function(sys = NULL, type = "reg", yr = NULL, mo = NULL, file_type = 
    sys_prefix  <- case_when(
       sys == "harp_dx" ~ "reg",
       sys == "harp_vl" ~ "vl_ml",
+      sys == "harp_dead" ~ "mort",
       type == "reg" ~ paste0("reg-", sys_altname),
       type == "outcome" ~ paste0("on", sys_altname),
       TRUE ~ sys_altname
