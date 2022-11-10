@@ -28,7 +28,8 @@ hs_data <- function(sys = NULL, type = "reg", yr = NULL, mo = NULL, file_type = 
    }
 
    # find the latest file
-   get_latest <- function(path, pattern) sort(list.files(path = path, pattern = pattern, full.names = TRUE), decreasing = TRUE)
+   # get_latest <- function(path, pattern) sort(list.files(path = path, pattern = pattern, full.names = TRUE), decreasing = TRUE)
+   get_latest <- function(path, pattern) (dir_info(path = path, regexp = pattern) %>% arrange(desc(path), desc(modification_time)))$path
 
    # summary preparations for yr mo data
    if (!is.numeric(yr) || !is.numeric(mo)) {
