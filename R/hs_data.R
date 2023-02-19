@@ -21,7 +21,7 @@
 hs_data <- function(sys = NULL, type = "reg", yr = NULL, mo = NULL, file_type = "dta") {
    # ! internal functions
    # format string path
-   format_path <- function(yr, mo) {
+   format_path <- function(yr, mo, sys_prefix, file_type) {
       yr      <- as.character(yr)
       mo      <- ifelse(nchar(mo) == 1, paste0("0", mo), mo)
       pattern <- glue("*{sys_prefix}[-a-z]*_{yr}\\-{mo}.*\\.{file_type}")
@@ -51,9 +51,12 @@ hs_data <- function(sys = NULL, type = "reg", yr = NULL, mo = NULL, file_type = 
    )
    sys_prefix  <- case_when(
       sys == "harp_dx" ~ "reg",
-      sys == "harp_vl" ~ "vl_ml",
       sys == "harp_dead" ~ "mort",
+      sys == "harp_full" ~ "harp",
       sys == "pmtct" ~ paste0("pmtct-", type),
+      sys == "harp_vl" & type == "ml" ~ "vl_ml",
+      sys == "harp_vl" & type == "naive_dx" ~ "vlnaive-dx",
+      sys == "harp_vl" & type == "naive_tx" ~ "vlnaive-tx",
       type == "reg" ~ paste0("reg-", sys_altname),
       type == "outcome" ~ paste0("on", sys_altname),
       TRUE ~ sys_altname
@@ -61,7 +64,7 @@ hs_data <- function(sys = NULL, type = "reg", yr = NULL, mo = NULL, file_type = 
 
    # get full path
    path    <- Sys.getenv(toupper(sys))
-   pattern <- format_path(yr, mo)
+   pattern <- format_path(yr, mo, sys_prefix, file_type)
 
    file <- get_latest(path, pattern)[1]
    while (is.na(file)) {
