@@ -89,16 +89,16 @@ tabstat <- function(data, ...) {
       ) %>%
       mutate_all(~as.character(.)) %>%
       pivot_longer(
-         cols      = names(select_at(., vars(ends_with(c("_MEDIAN", "_MAX", "_MIN", "_NAs", ignore.case = FALSE))))),
+         cols      = names(select_at(., vars(ends_with(c("MEDIAN", "MAX", "MIN", "NAs", ignore.case = FALSE))))),
          names_to  = "VARIABLE",
          values_to = "VAL"
       ) %>%
       mutate(
          STAT     = case_when(
-            stri_detect_regex(VARIABLE, "_MEDIAN$") ~ "MEDIAN",
-            stri_detect_regex(VARIABLE, "_MIN$") ~ "MIN",
-            stri_detect_regex(VARIABLE, "_MAX$") ~ "MAX",
-            stri_detect_regex(VARIABLE, "_NAs$") ~ "NAs",
+            stri_detect_regex(VARIABLE, "MEDIAN$") ~ "MEDIAN",
+            stri_detect_regex(VARIABLE, "MIN$") ~ "MIN",
+            stri_detect_regex(VARIABLE, "MAX$") ~ "MAX",
+            stri_detect_regex(VARIABLE, "NAs$") ~ "NAs",
          ),
          VARIABLE = stri_replace_last_regex(VARIABLE, paste0("_", STAT, "$"), "")
       ) %>%
