@@ -77,8 +77,10 @@ tab <- function(data, ..., as_df = FALSE) {
 #' mtcars %>% tabstat(am, cyl)
 #' tabstat(mtcars, am, cyl)
 tabstat <- function(data, ...) {
-   data %>%
-      select(...) %>%
+   tab_data <- select(data, ...)
+   tab_vars <- names(tab_data)
+
+   tab_data <- tab_data %>%
       summarise_all(
          list(
             MIN    = ~suppress_warnings(min(., na.rm = TRUE), "returning [\\-]*Inf"),
@@ -100,7 +102,11 @@ tabstat <- function(data, ...) {
             stri_detect_regex(VARIABLE, "MAX$") ~ "MAX",
             stri_detect_regex(VARIABLE, "NAs$") ~ "NAs",
          ),
-         VARIABLE = stri_replace_last_regex(VARIABLE, paste0("_", STAT, "$"), "")
+         VARIABLE = if (length(tab_vars) == 1) {
+            tab_vars[1]
+         } else {
+            stri_replace_last_regex(VARIABLE, paste0("_", STAT, "$"), "")
+         }
       ) %>%
       pivot_wider(
          id_cols     = VARIABLE,
@@ -114,4 +120,6 @@ tabstat <- function(data, ...) {
          MAX,
          NAs
       )
+
+   return(tab_data)
 }
