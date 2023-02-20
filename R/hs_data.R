@@ -21,7 +21,7 @@
 hs_data <- function(sys = NULL, type = "reg", yr = NULL, mo = NULL, file_type = "dta") {
    # ! internal functions
    # format string path
-   format_path <- function(yr, mo, sys_prefix, file_type) {
+   format_path <- function(yr, mo, sys_prefix = NULL, file_type = file_type) {
       yr      <- as.character(yr)
       mo      <- ifelse(nchar(mo) == 1, paste0("0", mo), mo)
       pattern <- glue("*{sys_prefix}[-a-z]*_{yr}\\-{mo}.*\\.{file_type}")
