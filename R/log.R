@@ -18,6 +18,7 @@ log <- function(msg, log_type = "info") {
    )
 }
 
+#' @export
 log_info <- function(msg = NULL) {
    log_type <- "INFO" %>% stri_pad_right(7, " ")
    log      <- bold(blue(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
@@ -25,6 +26,7 @@ log_info <- function(msg = NULL) {
    cat(log, msg, "\n")
 }
 
+#' @export
 log_success <- function(msg = NULL) {
    log_type <- "SUCCESS" %>% stri_pad_right(7, " ")
    log      <- bold(green(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
@@ -32,6 +34,7 @@ log_success <- function(msg = NULL) {
    cat(log, msg, "\n")
 }
 
+#' @export
 log_warn <- function(msg = NULL) {
    log_type <- "WARN" %>% stri_pad_right(7, " ")
    log      <- bold(yellow(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
@@ -39,6 +42,7 @@ log_warn <- function(msg = NULL) {
    cat(log, msg, "\n")
 }
 
+#' @export
 log_error <- function(msg = NULL) {
    log_type <- "ERROR" %>% stri_pad_right(7, " ")
    log      <- bold(red(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
