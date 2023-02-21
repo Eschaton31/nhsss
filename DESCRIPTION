@@ -1,6 +1,6 @@
 Package: nhsss
 Title: Helper Library for the DOH-EB NHSSS Unit Data Management
-Version: 0.0.2.006
+Version: 0.0.2.007
 Authors@R: 
     person("John Benedict", "Palo", , "jrpalo@doh.gov.ph", role = c("aut", "cre"))
 Description: This package provides a host of functions that aim to help staff from the DOH-EB NHSSS Unit transition from
@@ -9,7 +9,7 @@ License:
     use_mit_license()
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports:
 	dplyr,
 	tidyr,
