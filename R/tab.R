@@ -6,7 +6,14 @@
 #'
 #' @param data the input data.frame
 #' @param ... columns to aggregate with. This takes a tidyselect specification.
-#' @param as_df should output be returned as a data.frame object. By default, the data is printed with formats.
+#' @param cross_tab columns to aggregate across groups from `...`. Defaults to `NULL`.
+#' @param cross_return should output be sorted by frequency. Defaults to `all`. Ignored if cross_tab = `NULL`
+#'   * `"freq"`: only frequencies
+#'   * `"col"` only column percentages
+#'   * `"row"` only row percentages
+#'   * `"freq+col"` frequencies and column percentages
+#'   * `"freq+row"` frequencies and row percentages
+#'   * `"all"` returns all data
 #' @return Returns an aggregated summary data.frame.
 #' @export
 #' @examples
@@ -18,43 +25,125 @@
 #' # multi-variate tabulation
 #' mtcars %>% tab(am, cyl)
 #' tab(mtcars, am, cyl)
-tab <- function(data, ..., as_df = FALSE) {
+#'
+#' # cross tabulation
+#' mtcars %>% tab(am, cross_tab = cyl)
+#' tab(mtcars, am, cross_tab = cyl)
+tab <- function(data, ..., cross_tab = NULL, cross_return = "all") {
+   # pull only needed columns
+   data <- data %>%
+      dplyr::select(..., {{cross_tab}}) %>%
+      mutate_if(
+         .predicate = is.character,
+         ~coalesce(na_if(str_squish(.), ""), "(no data)")
+      )
+
    # create summary frame
    tab_df <- data %>%
-      dplyr::group_by(...) %>%
+      dplyr::group_by_all() %>%
       dplyr::summarise(
          `Freq.` = n()
       ) %>%
-      ungroup() %>%
-      dplyr::mutate(
-         `Cum. Freq.`   = cumsum(`Freq.`),
-         `Percent`      = round((`Freq.` / sum(`Freq.`)), 10),
-         `Cum. Percent` = round(cumsum(freq = `Freq.` / sum(`Freq.`)), 10),
-      )
+      ungroup()
 
-   # get max data for cumulative cols
-   cum_freq <- max(tab_df$`Cum. Freq.`)
-   cum_perc <- max(tab_df$`Cum. Percent`)
-   tab_df   <- tab_df %>%
-      adorn_totals()
-
-   tab_df[nrow(tab_df), "Cum. Freq."]   <- cum_freq
-   tab_df[nrow(tab_df), "Cum. Percent"] <- cum_perc
-
-   # format frame
-   if (!as_df) {
+   # check if cross tabulation required
+   cross_var <- deparse(substitute(cross_tab))
+   vars      <- unique(data[[cross_var]])
+   if (cross_var != "NULL") {
+      # create frequency cross tabulation
       tab_df <- tab_df %>%
-         mutate(
-            `Freq.`        = num(`Freq.`, notation = "dec"),
-            `Cum. Freq.`   = num(`Cum. Freq.`, notation = "dec"),
-            `Percent`      = num(`Percent`, notation = "dec", label = "%", digits = 2, scale = 100),
-            `Cum. Percent` = num(`Cum. Percent`, label = "%", digits = 2, scale = 100),
+         pivot_wider(
+            names_from  = {{cross_tab}},
+            values_from = Freq.
          ) %>%
+         adorn_totals(c("row", "col"))
+
+      # get percentages across rows
+      if (cross_return == "all" || str_detect(cross_return, "row")) {
+         row_perc_df <- tab_df %>%
+            mutate_at(
+               .vars = vars(vars),
+               ~. / Total
+            ) %>%
+            rename_at(
+               .vars = vars(vars),
+               ~stri_c("row_% ", .)
+            ) %>%
+            select(-Total) %>%
+            mutate_at(
+               .vars = vars(starts_with("row_%")),
+               ~num(., notation = "dec", label = "Row %", digits = 2, scale = 100)
+            )
+
+         tab_df <- tab_df %>%
+            left_join(row_perc_df, join_by(...))
+      }
+
+      # get percentages across columns
+      if (cross_return == "all" || str_detect(cross_return, "col")) {
+         col_perc_df <- tab_df %>%
+            slice(-nrow(.)) %>%
+            mutate_at(
+               .vars = vars(vars),
+               ~(. / sum(.))
+            ) %>%
+            rename_at(
+               .vars = vars(vars),
+               ~stri_c("col_% ", .)
+            ) %>%
+            select(-Total) %>%
+            untabyl() %>%
+            adorn_totals("row") %>%
+            mutate_at(
+               .vars = vars(starts_with("col_%")),
+               ~num(., notation = "dec", label = "Column %", digits = 2, scale = 100)
+            )
+
+         tab_df <- tab_df %>%
+            left_join(col_perc_df, join_by(...))
+      }
+
+      # combine into one and format
+      tab_df <- tab_df %>%
          as_tibble() %>%
-         print(n = 1e7)
+         mutate_if(
+            .predicate = is.integer,
+            ~num(., notation = "dec")
+         )
+
+      # return type
+      if (cross_return == "freq+row") {
+         tab_df <- tab_df %>%
+            select(-starts_with("col_%"))
+      } else if (cross_return == "freq+col") {
+         tab_df <- tab_df %>%
+            select(-starts_with("row_%"))
+      } else if (cross_return == "freq") {
+         tab_df <- tab_df %>%
+            select(-contains("%"))
+      } else if (cross_return == "col") {
+         tab_df <- tab_df %>%
+            select(..., starts_with("col_%"))
+      } else if (cross_return == "row") {
+         tab_df <- tab_df %>%
+            select(..., starts_with("row_%"))
+      }
    } else {
-      return(tab_df)
+      tab_df <- tab_df %>%
+         dplyr::mutate(
+            `Percent` = (`Freq.` / sum(`Freq.`)),
+         ) %>%
+         # get max data for cumulative cols
+         janitor::adorn_totals("row") %>%
+         # format frame
+         as_tibble() %>%
+         mutate(
+            `Freq.`   = num(`Freq.`, notation = "dec"),
+            `Percent` = num(`Percent`, notation = "dec", label = "%", digits = 2, scale = 100),
+         )
    }
+
+   return(tab_df)
 }
 
 #' @title Stata-like Statistics Tabulation

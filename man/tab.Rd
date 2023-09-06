@@ -4,14 +4,24 @@
 \alias{tab}
 \title{Stata-like Tabulation}
 \usage{
-tab(data, ..., as_df = FALSE)
+tab(data, ..., cross_tab = NULL, cross_return = "all")
 }
 \arguments{
 \item{data}{the input data.frame}
 
 \item{...}{columns to aggregate with. This takes a tidyselect specification.}
 
-\item{as_df}{should output be returned as a data.frame object. By default, the data is printed with formats.}
+\item{cross_tab}{columns to aggregate across groups from \code{...}. Defaults to \code{NULL}.}
+
+\item{cross_return}{should output be sorted by frequency. Defaults to \code{all}. Ignored if cross_tab = \code{NULL}
+\itemize{
+\item \code{"freq"}: only frequencies
+\item \code{"col"} only column percentages
+\item \code{"row"} only row percentages
+\item \code{"freq+col"} frequencies and column percentages
+\item \code{"freq+row"} frequencies and row percentages
+\item \code{"all"} returns all data
+}}
 }
 \value{
 Returns an aggregated summary data.frame.
@@ -29,4 +39,8 @@ tab(mtcars, am)
 # multi-variate tabulation
 mtcars \%>\% tab(am, cyl)
 tab(mtcars, am, cyl)
+
+# cross tabulation
+mtcars \%>\% tab(am, cross_tab = cyl)
+tab(mtcars, am, cross_tab = cyl)
 }
