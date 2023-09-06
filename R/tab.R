@@ -6,8 +6,8 @@
 #'
 #' @param data the input data.frame
 #' @param ... columns to aggregate with. This takes a tidyselect specification.
-#' @param cross_tab columns to aggregate across groups from `...`. Defaults to `NULL`.
-#' @param cross_return should output be sorted by frequency. Defaults to `all`. Ignored if cross_tab = `NULL`
+#' @param cross_tab (optional) columns to aggregate across groups from `...`. Defaults to `NULL`.
+#' @param cross_return (optional) controls which values are retained. Defaults to `all`. Ignored if cross_tab = `NULL`
 #'   * `"freq"`: only frequencies
 #'   * `"col"` only column percentages
 #'   * `"row"` only row percentages

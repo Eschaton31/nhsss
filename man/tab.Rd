@@ -11,9 +11,9 @@ tab(data, ..., cross_tab = NULL, cross_return = "all")
 
 \item{...}{columns to aggregate with. This takes a tidyselect specification.}
 
-\item{cross_tab}{columns to aggregate across groups from \code{...}. Defaults to \code{NULL}.}
+\item{cross_tab}{(optional) columns to aggregate across groups from \code{...}. Defaults to \code{NULL}.}
 
-\item{cross_return}{should output be sorted by frequency. Defaults to \code{all}. Ignored if cross_tab = \code{NULL}
+\item{cross_return}{(optional) controls which values are retained. Defaults to \code{all}. Ignored if cross_tab = \code{NULL}
 \itemize{
 \item \code{"freq"}: only frequencies
 \item \code{"col"} only column percentages
