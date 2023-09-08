@@ -64,6 +64,7 @@ tab <- function(data, ..., cross_tab = NULL, cross_return = "all") {
       # get percentages across rows
       if (cross_return == "all" || str_detect(cross_return, "row")) {
          row_perc_df <- tab_df %>%
+            select(-starts_with("col_%")) %>%
             mutate_at(
                .vars = vars(vars),
                ~. / Total
@@ -85,6 +86,7 @@ tab <- function(data, ..., cross_tab = NULL, cross_return = "all") {
       # get percentages across columns
       if (cross_return == "all" || str_detect(cross_return, "col")) {
          col_perc_df <- tab_df %>%
+            select(-starts_with("row_%")) %>%
             slice(-nrow(.)) %>%
             mutate_at(
                .vars = vars(vars),
