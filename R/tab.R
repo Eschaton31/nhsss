@@ -90,7 +90,7 @@ tab <- function(data, ..., cross_tab = NULL, cross_return = "all") {
             slice(-nrow(.)) %>%
             mutate_at(
                .vars = vars(vars),
-               ~(. / sum(.))
+               ~(. / sum(., na.rm = TRUE))
             ) %>%
             rename_at(
                .vars = vars(vars),
