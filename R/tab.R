@@ -52,6 +52,9 @@ tab <- function(data, ..., cross_tab = NULL, cross_return = "all") {
    if (cross_var != "NULL") {
       # create frequency cross tabulation
       tab_df <- tab_df %>%
+         mutate(
+            {{cross_tab}} := as.character({{cross_tab}})
+         ) %>%
          pivot_wider(
             names_from  = {{cross_tab}},
             values_from = Freq.
@@ -69,7 +72,6 @@ tab <- function(data, ..., cross_tab = NULL, cross_return = "all") {
                .vars = vars(vars),
                ~stri_c("row_% ", .)
             ) %>%
-            select(-Total) %>%
             mutate_at(
                .vars = vars(starts_with("row_%")),
                ~num(., notation = "dec", label = "Row %", digits = 2, scale = 100)
