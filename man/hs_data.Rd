@@ -20,6 +20,10 @@ hs_data(sys = NULL, type = "reg", yr = NULL, mo = NULL, file_type = "dta")
 \itemize{
 \item \code{"reg"}: line-list registry
 \item \code{"outcome"}: line-list outcomes/status
+\item \code{"ml"}: (harp_vl only) vl masterlist
+\item \code{"naive_dx"}: (harp_vl only) first/last vl results among dx
+\item \code{"naive_tx"}: (harp_vl only) first/last vl results among tx
+\item \code{"all"}: (harp_vl only) all historical vl data
 }}
 
 \item{yr}{reporting year of data}

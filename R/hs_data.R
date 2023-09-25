@@ -13,6 +13,10 @@
 #' @param type type of dataset to be returned, By default, returns registries.
 #'   * `"reg"`: line-list registry
 #'   * `"outcome"`: line-list outcomes/status
+#'   * `"ml"`: (harp_vl only) vl masterlist
+#'   * `"naive_dx"`: (harp_vl only) first/last vl results among dx
+#'   * `"naive_tx"`: (harp_vl only) first/last vl results among tx
+#'   * `"all"`: (harp_vl only) all historical vl data
 #' @param yr reporting year of data
 #' @param mo reporting month of data
 #' @param file_type file extension of the data to retreived
@@ -57,6 +61,7 @@ hs_data <- function(sys = NULL, type = "reg", yr = NULL, mo = NULL, file_type = 
       sys == "harp_vl" & type == "ml" ~ "vl_ml",
       sys == "harp_vl" & type == "naive_dx" ~ "vlnaive-dx",
       sys == "harp_vl" & type == "naive_tx" ~ "vlnaive-tx",
+      sys == "harp_vl" & type == "all" ~ "vldata",
       type == "reg" ~ paste0("reg-", sys_altname),
       type == "outcome" ~ paste0("on", sys_altname),
       TRUE ~ sys_altname
