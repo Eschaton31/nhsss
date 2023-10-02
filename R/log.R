@@ -1,5 +1,8 @@
 #' @title Info logger
 #'
+#' @import glue
+#' @import crayon
+#'
 #' @description
 #' These functions help provided formatted messages for better logging.
 #'
@@ -21,7 +24,7 @@ log <- function(msg, log_type = "info") {
 #' @export
 log_info <- function(msg = NULL) {
    log_type <- "INFO" %>% stri_pad_right(7, " ")
-   log      <- crayon::bold(blue(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
+   log      <- bold(blue(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
    msg      <- glue(msg, .envir = parent.frame(1))
    cat(log, msg, "\n")
 }
@@ -29,7 +32,7 @@ log_info <- function(msg = NULL) {
 #' @export
 log_success <- function(msg = NULL) {
    log_type <- "SUCCESS" %>% stri_pad_right(7, " ")
-   log      <- crayon::bold(green(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
+   log      <- bold(green(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
    msg      <- glue(msg, .envir = parent.frame(1))
    cat(log, msg, "\n")
 }
@@ -37,7 +40,7 @@ log_success <- function(msg = NULL) {
 #' @export
 log_warn <- function(msg = NULL) {
    log_type <- "WARN" %>% stri_pad_right(7, " ")
-   log      <- crayon::bold(yellow(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
+   log      <- bold(yellow(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
    msg      <- glue(msg, .envir = parent.frame(1))
    cat(log, msg, "\n")
 }
@@ -45,7 +48,7 @@ log_warn <- function(msg = NULL) {
 #' @export
 log_error <- function(msg = NULL) {
    log_type <- "ERROR" %>% stri_pad_right(7, " ")
-   log      <- crayon::bold(red(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
+   log      <- bold(red(log_type)) %+% magenta(glue(' [{format(Sys.time(), "%Y-%m-%d %H:%M:%S")}]'))
    msg      <- glue(msg, .envir = parent.frame(1))
    cat(log, msg, "\n")
 }
