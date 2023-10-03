@@ -36,6 +36,10 @@ tab <- function(data, ..., cross_tab = NULL, cross_return = "all") {
       mutate_if(
          .predicate = is.character,
          ~coalesce(na_if(str_squish(.), ""), "(no data)")
+      ) %>%
+      mutate_if(
+         .predicate = is.labelled,
+         ~labelled::to_character(.)
       )
 
    # create summary frame
