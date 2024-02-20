@@ -38,7 +38,7 @@ tab <- function(data, ..., cross_tab = NULL, cross_return = "all") {
          ~coalesce(na_if(str_squish(.), ""), "(no data)")
       ) %>%
       mutate_if(
-         .predicate = is.labelled,
+         .predicate = labelled::is.labelled,
          ~labelled::to_character(.)
       )
 
