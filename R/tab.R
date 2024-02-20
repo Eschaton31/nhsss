@@ -80,7 +80,7 @@ tab <- function(data, ..., cross_tab = NULL, cross_return = "all") {
             select(-Total) %>%
             mutate_at(
                .vars = vars(starts_with("row_%")),
-               ~num(., notation = "dec", label = "Row %", digits = 2, scale = 100)
+               ~num(., notation = "dec", label = "%", digits = 2, scale = 100)
             )
 
          tab_df <- tab_df %>%
@@ -105,7 +105,7 @@ tab <- function(data, ..., cross_tab = NULL, cross_return = "all") {
             adorn_totals("row") %>%
             mutate_at(
                .vars = vars(starts_with("col_%")),
-               ~num(., notation = "dec", label = "Column %", digits = 2, scale = 100)
+               ~num(., notation = "dec", label = "%", digits = 2, scale = 100)
             )
 
          tab_df <- tab_df %>%
