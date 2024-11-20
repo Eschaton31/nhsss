@@ -41,7 +41,7 @@ hs_data <- function(sys = NULL, type = "reg", yr = NULL, mo = NULL, file_type = 
       mo <- as.numeric(mo)
    }
 
-   if (!StrIsNumeric(yr) || !StrIsNumeric(mo)) {
+   if (!varhandle::check.numeric(yr) || !varhandle::check.numeric(mo)) {
       log_error("The {red('yr')} and {red('mo')} parameters must be numeric.")
       stop()
    }
