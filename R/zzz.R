@@ -35,7 +35,7 @@
 
    reg.finalizer(
       e      = .GlobalEnv,
-      f      = {
+      f      = function() {
          pool::poolClose(.GlobalEnv$`oh-live`)
          pool::poolClose(.GlobalEnv$`oh-lw`)
       },
