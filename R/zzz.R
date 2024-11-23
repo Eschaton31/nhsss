@@ -1,34 +1,3 @@
-connnectDB <- function() {
-   if (Sys.getenv("DB_USER") == "") {
-      invisible(TRUE)
-   }
-
-   if (is.null(.GlobalEnv$`oh-live`)) {
-      .GlobalEnv$`oh-live` <- pool::dbPool(
-         RMariaDB::MariaDB(),
-         user     = Sys.getenv("DB_USER"),
-         password = Sys.getenv("DB_PASS"),
-         host     = Sys.getenv("DB_HOST"),
-         port     = Sys.getenv("DB_PORT"),
-         timeout  = -1
-      )
-   }
-
-   if (is.null(.GlobalEnv$`oh-lw`)) {
-      .GlobalEnv$`oh-lw` <- pool::dbPool(
-         RMariaDB::MariaDB(),
-         user     = Sys.getenv("LW_USER"),
-         password = Sys.getenv("LW_PASS"),
-         host     = Sys.getenv("LW_HOST"),
-         port     = Sys.getenv("LW_PORT"),
-         timeout  = -1
-      )
-   }
-
-   invisible(TRUE)
-}
-
-
 .onAttach <- function(libname, pkgname) {
    options(
       pillar.print_min = 1e7,
@@ -38,10 +7,11 @@ connnectDB <- function() {
 
 .onLoad <- function(libname, pkgname) {
    if (Sys.getenv("DB_USER") == "") {
-      invisible()
+      invisible(TRUE)
    }
 
-   if (is.null(.GlobalEnv$`oh-live`)) {
+
+   if (!("oh-live" %in% ls(envir = .GlobalEnv))) {
       .GlobalEnv$`oh-live` <- pool::dbPool(
          RMariaDB::MariaDB(),
          user     = Sys.getenv("DB_USER"),
@@ -52,7 +22,7 @@ connnectDB <- function() {
       )
    }
 
-   if (is.null(.GlobalEnv$`oh-lw`)) {
+   if (!("oh-lw" %in% ls(envir = .GlobalEnv))) {
       .GlobalEnv$`oh-lw` <- pool::dbPool(
          RMariaDB::MariaDB(),
          user     = Sys.getenv("LW_USER"),
