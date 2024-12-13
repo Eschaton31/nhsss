@@ -1,6 +1,6 @@
 Package: nhsss
 Title: Helper Library for the DOH-EB NHSSS Unit Data Management
-Version: 0.0.4.023
+Version: 0.0.4.024
 Authors@R:
     person("John Benedict", "Palo", , "jrpalo@doh.gov.ph", role = c("aut", "cre"))
 Description: This package provides a host of functions that aim to help staff from the DOH-EB NHSSS Unit transition from
