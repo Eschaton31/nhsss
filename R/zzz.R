@@ -6,7 +6,7 @@
 }
 
 .onLoad <- function(libname, pkgname) {
-   if (Sys.getenv("DB_USER") != "") {
+   if (Sys.getenv("DB_USER") != "" && pacman::p_loaded(pool)) {
 
       if (!("oh-live" %in% ls(envir = .GlobalEnv))) {
          .GlobalEnv$`oh-live` <- pool::dbPool(
