@@ -21,7 +21,7 @@
 
       if (!("oh-lw" %in% ls(envir = .GlobalEnv))) {
          .GlobalEnv$`oh-lw` <- pool::dbPool(
-            RMariaDB::MariaDB(),
+            RClickhouse::clickhouse(),
             user     = Sys.getenv("LW_USER"),
             password = Sys.getenv("LW_PASS"),
             host     = Sys.getenv("LW_HOST"),
