@@ -25,7 +25,7 @@
             user     = Sys.getenv("LW_USER"),
             password = Sys.getenv("LW_PASS"),
             host     = Sys.getenv("LW_HOST"),
-            port     = Sys.getenv("LW_PORT"),
+            port     = as.numeric(Sys.getenv("LW_PORT")),
             timeout  = -1
          )
       }
